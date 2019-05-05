@@ -1,2 +1,2 @@
-# udemy-React
-udemy React coursework (examples, assignments, projects, etc)
+# React
+Udemy React coursework (examples, assignments, projects, etc)
