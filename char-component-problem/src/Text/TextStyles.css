@@ -1,0 +1,24 @@
+.TextInput {
+  text-align: center;
+  padding: 10px;
+}
+
+.ValidateLength {
+  width: 75%;
+  margin: 10px auto;
+  border: 1px solid #eee;
+  box-shadow: 0 2px 3px #ccc;
+  padding: 10px;
+  text-align: left;
+  font-weight: bold;
+  font-size: 14px;
+  color: green;
+}
+
+.CharComponent {
+  display: inline-block;
+  padding: 16px;
+  text-align: center;
+  margin: 16px;
+  border: 1px solid black;
+}
