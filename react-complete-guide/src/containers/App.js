@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-//import Radium, {StyleRoot} from 'radium';
 import webpack from './App.css';
-import Person from './Person/Person';
-import ErrorBoundary from './ErrorBoundary/ErrorBoundary';
+import Cockpit from '../components/Cockpit/Cockpit';
+import Persons from '../components/Persons/Persons';
+import ErrorBoundary from '../components/ErrorBoundary/ErrorBoundary';
 
 class App extends Component {
   state = {
@@ -50,73 +50,33 @@ class App extends Component {
   }
 
   render() {
-    /*const myStyle = {
-      backgroundColor: 'green',
-      color: 'white',
-      font: 'inherit',
-      border: '1px solid blue',
-      padding: '8px',
-      cursor: 'pointer',
-      ':hover': {
-        backgroundColor: 'lightgreen',
-        color: 'black'
-      }
-    };*/
-
     let persons = null;
-    let btnClass = null;
     if (this.state.showPersons) {
       persons = (
         <ErrorBoundary>
         <div>
-          {this.state.persons.map((person, index) => {
-            return <Person
-              key={person.id}
-              name={person.name}
-              age={person.age}
-              clickHandler={() => this.deletePersonHandler(index)}
-              changed={(event) => this.nameChangedHandler(event, person.id)}
-            >
-              Status: {person.status}
-            </Person>
-          })}
+          <Persons 
+            persons={this.state.persons}
+            clicked={this.deletePersonHandler}
+            changed={this.nameChangedHandler}
+          />
         </div>
         </ErrorBoundary>
       );
-      btnClass = webpack.Red;
-      //myStyle.backgroundColor = 'red';
-      //myStyle[':hover'] = {
-      //  backgroundColor: 'salmon',
-      //  color: 'black'
-      //};
-    }
-
-    const classes=[];
-    if (this.state.persons.length <= 2) {
-      classes.push(webpack.red); // classes = ['red']
-    }
-    if (this.state.persons.length <= 1) {
-      classes.push(webpack.bold); // classes = ['red', 'bold']
     }
 
     return (
       <div className={webpack.App}>
-        <h1>Learning React</h1>
-        <p className={classes.join(' ')}>This is really working!</p>
-        <button
-          className={btnClass}
-          /*style={myStyle}*/
-          onClick={this.togglePersonHandler}
-        >
-          {this.state.showPersons ? "Hide" : "Show"} Persons
-        </button>
+        <Cockpit
+          show={this.state.showPersons}
+          len={this.state.persons.length}
+          clicked={this.togglePersonHandler}
+        />
         {persons}
       </div>
     );
-    // return (<StyleRoot> <div className="App"> ... </div> </StyleRoot>) // Radium styles
     // return React.createElement('div', {className: 'App'}, React.createElement('h1', null, 'Raw React'));
   }
 }
 
-//export default Radium(App);
 export default App;
