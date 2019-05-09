@@ -1,16 +1,34 @@
-import React from 'react';
+import React, { Component } from 'react';
 import Person from './Person/Person';
 
-const persons = (props) => props.persons.map((person, index) => {
-	return <Person
-	  key={person.id}
-	  name={person.name}
-	  age={person.age}
-	  clickHandler={() => props.clicked(index)}
-	  changed={(event) => props.changed(event, person.id)}
-	>
-	  Status: {person.status}
-	</Person>
-});
+class Persons extends Component {
+	constructor(props) {
+		super(props);
+		console.log('[Persons.js] inside constructor', props);
+	}
+	
+	componentWillMount() {
+		console.log('[Persons.js] inside componentWillMount');
+	}
+	
+	componentDidMount() {
+		console.log('[Persons.js] inside componentDidMount');
+	}
+	
+	render() {
+		console.log('[Persons.js] inside render');
 
-export default persons;
+		return this.props.persons.map((person, index) => {
+			return <Person
+				key={person.id}
+				name={person.name}
+				age={person.age}
+				clickHandler={() => this.props.clicked(index)}
+				changed={(event) => this.props.changed(event, person.id)}
+			>
+				Status: {person.status}
+			</Person>
+		});
+	}
+}
+export default Persons;

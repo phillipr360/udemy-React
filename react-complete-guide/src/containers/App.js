@@ -5,6 +5,31 @@ import Persons from '../components/Persons/Persons';
 import ErrorBoundary from '../components/ErrorBoundary/ErrorBoundary';
 
 class App extends Component {
+	constructor(props) {
+		super(props);
+		console.log('[App.js] inside constructor', props);
+		
+		// Legacy React: Initialize state in constructor
+		
+	  //this.state = {
+	  //  persons: [
+	  //    {id: 1, name: 'Phil', age: 39, status: 'Ninja'},
+	  //    {id: 2, name: 'Bill', age: 43, status: 'Iced'},
+	  //    {id: 404, name: 'Markus', age: 46, status: 'TG'}
+	  //  ],
+		//  title: props.title,
+	  //  showPersons: false
+	  //}
+	}
+	
+	componentWillMount() {
+		console.log('[App.js] inside componentWillMount');
+	}
+	
+	componentDidMount() {
+		console.log('[App.js] inside componentDidMount');
+	}
+	
   state = {
     persons: [
       {id: 1, name: 'Phil', age: 39, status: 'Ninja'},
@@ -50,6 +75,8 @@ class App extends Component {
   }
 
   render() {
+  	console.log('[App.js] inside render');
+  	
     let persons = null;
     if (this.state.showPersons) {
       persons = (
@@ -68,6 +95,7 @@ class App extends Component {
     return (
       <div className={webpack.App}>
         <Cockpit
+          appTitle={this.props.title}
           show={this.state.showPersons}
           len={this.state.persons.length}
           clicked={this.togglePersonHandler}

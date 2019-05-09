@@ -13,7 +13,7 @@ const cockpit = (props) => {
   
 	return (
 		<div className={webpack.Cockpit}>
-			<h1>Learning React</h1>
+			<h1>{props.appTitle}</h1>
 			<p className={classes.join(' ')}>This is really working!</p>
 			<button
 				className={btnClass}
