@@ -30,6 +30,20 @@ class App extends Component {
 		console.log('[App.js] inside componentDidMount');
 	}
 	
+	shouldComponentUpdate(newProps, newState) {
+		const shouldUpdate = newState.showPersons !== this.state.showPersons || newState.persons !== this.state.persons;
+		console.log(`Update: [App.js] inside shouldUpdate returns ${shouldUpdate}`, newProps, newState);
+		return shouldUpdate;
+	}
+	
+	componentWillUpdate(newProps, newState) {
+		console.log('Update: [App.js] inside componentWillUpdate', newProps, newState);
+	}
+	
+	componentDidUpdate() {
+		console.log('Update: [App.js] inside componentDidUpdate');
+	}
+	
   state = {
     persons: [
       {id: 1, name: 'Phil', age: 39, status: 'Ninja'},
@@ -62,6 +76,10 @@ class App extends Component {
   deletePersonHandler = (index) => {
     // const persons = this.state.persons; DO NOT DO THIS! MUTATES STATE REFERENCE!
     // const persons = this.state.persons.slice(); //ES 5 immutable list
+  	if (this.state.persons.length === 1) {
+  		this.setState({freezePersons: true});
+  		return;
+  	}
     const persons = [...this.state.persons];
     persons.splice(index, 1);
     this.setState({persons: persons});
