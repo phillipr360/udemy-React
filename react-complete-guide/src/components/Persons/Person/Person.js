@@ -1,5 +1,10 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+
 import webpack from './Person.css';
+import Aux from '../../../hoc/Aux';
+//import WithClass from '../../../hoc/WithClass';
+import wrappedClass from '../../../hoc/wrappedClass';
 
 class Person extends Component {
 	constructor(props) {
@@ -20,7 +25,7 @@ class Person extends Component {
 	}
 	
 	shouldComponentUpdate(newProps, newState) {
-		const shouldUpdate = (newProps.name !== this.props.name);
+		const shouldUpdate = (newProps.name !== this.props.name || newProps.index !== this.props.index);
 		console.log(`Update: [Person.js] object ${newProps.name} inside shouldUpdate returns ${shouldUpdate}`, newProps, newState);
 		return shouldUpdate;
 	}
@@ -40,14 +45,29 @@ class Person extends Component {
 	render() {
 		console.log(`[Person.js] object ${this.props.name} inside render`);
 		
+  	//return [
+  	//  <p key="1" onClick={this.props.clickHandler}>I'm {this.props.name} and I'm {this.props.age} years old.</p>,
+  	//  <p key="2">{this.props.children}</p>,
+  	//  <input key="3" type="text" value={this.props.name} onChange={this.props.changed}/>
+  	//];
+		
   	return (
-  		<div className={webpack.Person} >
+  		<Aux>
   			<p onClick={this.props.clickHandler}>I'm {this.props.name} and I'm {this.props.age} years old.</p>
   			<p>{this.props.children}</p>
   			<input type="text" value={this.props.name} onChange={this.props.changed}/>
-  		</div>
+  		</Aux>
   	);
   }
 }
 
-export default Person;
+Person.propTypes = {
+	index: PropTypes.number,
+	name: PropTypes.string,
+	age: PropTypes.number,
+	clickHandler: PropTypes.func,
+	changed: PropTypes.func,
+	children: PropTypes.node
+};
+
+export default wrappedClass(Person, webpack.Person);

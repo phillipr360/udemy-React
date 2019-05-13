@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import Person from './Person/Person';
 
-class Persons extends Component {
+class Persons extends PureComponent {
 	constructor(props) {
 		super(props);
 		console.log('[Persons.js] list inside constructor', props);
@@ -19,13 +20,15 @@ class Persons extends Component {
 		console.log('Update: [Persons.js] list will receive props inside componentWillReceiveProps', newProps);
 	}
 	
-	shouldComponentUpdate(newProps, newState) {
-		// technically, will always be a new immutable array of persons
-		// should compare references to each person object in array instead
-		const shouldUpdate = (newProps.persons !== this.props.persons);
-		console.log(`Update: [Persons.js] list inside shouldUpdate returns ${shouldUpdate}`, newProps, newState);
-		return shouldUpdate;
-	}
+	//shouldComponentUpdate(newProps, newState) {
+	//	// technically, will always be a new immutable array of persons
+	//	// should compare references to each person object in array instead
+	//  // or use PureComponent
+	//
+	//	const shouldUpdate = newProps.persons !== this.props.persons;
+	//	console.log(`Update: [Persons.js] list inside shouldUpdate returns ${shouldUpdate}`, newProps, newState);
+	//	return shouldUpdate;
+	//}
 	
 	componentWillUpdate(newProps, newState) {
 		console.log('Update: [Persons.js] list inside componentWillUpdate', newProps, newState);
@@ -45,6 +48,7 @@ class Persons extends Component {
 		return this.props.persons.map((person, index) => {
 			return <Person
 				key={person.id}
+			  index={index}
 				name={person.name}
 				age={person.age}
 				clickHandler={() => this.props.clicked(index)}
@@ -55,4 +59,11 @@ class Persons extends Component {
 		});
 	}
 }
+
+Persons.propTypes = {
+	persons: PropTypes.array,
+	clicked: PropTypes.func,
+	changed: PropTypes.func
+};
+
 export default Persons;

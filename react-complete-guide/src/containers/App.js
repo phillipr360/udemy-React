@@ -1,10 +1,13 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import webpack from './App.css';
+import Aux from '../hoc/Aux';
+import wrappedClass from '../hoc/wrappedClass';
+//import WithClass from '../hoc/WithClass';
 import Cockpit from '../components/Cockpit/Cockpit';
 import Persons from '../components/Persons/Persons';
 import ErrorBoundary from '../components/ErrorBoundary/ErrorBoundary';
 
-class App extends Component {
+class App extends PureComponent {
 	constructor(props) {
 		super(props);
 		console.log('[App.js] inside constructor', props);
@@ -30,11 +33,13 @@ class App extends Component {
 		console.log('[App.js] inside componentDidMount');
 	}
 	
-	shouldComponentUpdate(newProps, newState) {
-		const shouldUpdate = newState.showPersons !== this.state.showPersons || newState.persons !== this.state.persons;
-		console.log(`Update: [App.js] inside shouldUpdate returns ${shouldUpdate}`, newProps, newState);
-		return shouldUpdate;
-	}
+	//shouldComponentUpdate(newProps, newState) {
+	//  //PureComponents implement should shouldComponentUpdate() automatically, only update if props change
+	//
+	//	const shouldUpdate = newState.showPersons !== this.state.showPersons || newState.persons !== this.state.persons;
+	//	console.log(`Update: [App.js] inside shouldUpdate returns ${shouldUpdate}`, newProps, newState);
+	//	return shouldUpdate;
+	//}
 	
 	componentWillUpdate(newProps, newState) {
 		console.log('Update: [App.js] inside componentWillUpdate', newProps, newState);
@@ -50,7 +55,8 @@ class App extends Component {
       {id: 2, name: 'Bill', age: 43, status: 'Iced'},
       {id: 404, name: 'Markus', age: 46, status: 'TG'}
     ],
-    showPersons: false
+    showPersons: false,
+    counter: 0
   }
 
   nameChangedHandler = (event, id) => {
@@ -77,7 +83,6 @@ class App extends Component {
     // const persons = this.state.persons; DO NOT DO THIS! MUTATES STATE REFERENCE!
     // const persons = this.state.persons.slice(); //ES 5 immutable list
   	if (this.state.persons.length === 1) {
-  		this.setState({freezePersons: true});
   		return;
   	}
     const persons = [...this.state.persons];
@@ -87,8 +92,11 @@ class App extends Component {
 
   togglePersonHandler = (event) => {
     const isShowing = this.state.showPersons;
-    this.setState({
-      showPersons: !isShowing
+    this.setState((prevState, props) => {
+    	return {
+        showPersons: !isShowing,
+        counter: (prevState.counter + 1)
+    	}
     });
   }
 
@@ -111,7 +119,8 @@ class App extends Component {
     }
 
     return (
-      <div className={webpack.App}>
+      <Aux>
+        <button onClick={() => (this.setState({showPersons: true}))}>Always Show Persons</button>
         <Cockpit
           appTitle={this.props.title}
           show={this.state.showPersons}
@@ -119,10 +128,10 @@ class App extends Component {
           clicked={this.togglePersonHandler}
         />
         {persons}
-      </div>
+      </Aux>
     );
     // return React.createElement('div', {className: 'App'}, React.createElement('h1', null, 'Raw React'));
   }
 }
 
-export default App;
+export default wrappedClass(App, webpack.App);

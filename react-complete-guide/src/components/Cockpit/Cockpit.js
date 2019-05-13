@@ -1,8 +1,9 @@
 import React from 'react';
+import Aux from '../../hoc/Aux';
 import webpack from './Cockpit.css';
 
 const cockpit = (props) => {
-	const btnClass = props.show ? webpack.Red : null;
+	const btnClasses = props.show ? [webpack.Button, webpack.Red] : [webpack.Button];
   const classes=[];
   if (props.len <= 2) {
     classes.push(webpack.red); // classes = ['red']
@@ -12,16 +13,16 @@ const cockpit = (props) => {
   }
   
 	return (
-		<div className={webpack.Cockpit}>
+		<Aux>
 			<h1>{props.appTitle}</h1>
 			<p className={classes.join(' ')}>This is really working!</p>
 			<button
-				className={btnClass}
+				className={btnClasses.join(' ')}
 				onClick={props.clicked}
 			>
 				{props.show ? "Hide" : "Show"} Persons
 			</button>
-		</div>
+		</Aux>
 	);
 };
 
