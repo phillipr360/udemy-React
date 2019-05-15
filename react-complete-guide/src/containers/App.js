@@ -7,6 +7,8 @@ import Cockpit from '../components/Cockpit/Cockpit';
 import Persons from '../components/Persons/Persons';
 import ErrorBoundary from '../components/ErrorBoundary/ErrorBoundary';
 
+export const AuthContext = React.createContext(false);
+
 class App extends PureComponent {
 	constructor(props) {
 		super(props);
@@ -56,7 +58,8 @@ class App extends PureComponent {
       {id: 404, name: 'Markus', age: 46, status: 'TG'}
     ],
     showPersons: false,
-    counter: 0
+    counter: 0,
+    authenticated: false
   }
 
   nameChangedHandler = (event, id) => {
@@ -99,6 +102,10 @@ class App extends PureComponent {
     	}
     });
   }
+  
+  loginHandler = () => {
+  	this.setState({authenticated: true})
+  }
 
   render() {
   	console.log('[App.js] inside render');
@@ -112,6 +119,7 @@ class App extends PureComponent {
             persons={this.state.persons}
             clicked={this.deletePersonHandler}
             changed={this.nameChangedHandler}
+            // isAuthenticated={this.state.authenticated}
           />
         </div>
         </ErrorBoundary>
@@ -125,9 +133,12 @@ class App extends PureComponent {
           appTitle={this.props.title}
           show={this.state.showPersons}
           len={this.state.persons.length}
+          login={this.loginHandler}
           clicked={this.togglePersonHandler}
         />
-        {persons}
+        <AuthContext.Provider value={this.state.authenticated}>
+          {persons}
+        </AuthContext.Provider>
       </Aux>
     );
     // return React.createElement('div', {className: 'App'}, React.createElement('h1', null, 'Raw React'));

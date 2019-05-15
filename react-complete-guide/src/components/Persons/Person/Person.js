@@ -5,10 +5,12 @@ import webpack from './Person.css';
 import Aux from '../../../hoc/Aux';
 //import WithClass from '../../../hoc/WithClass';
 import wrappedClass from '../../../hoc/wrappedClass';
+import { AuthContext } from '../../../containers/App';
 
 class Person extends Component {
 	constructor(props) {
 		super(props);
+		this.inputElement = React.createRef();
 		console.log(`[Person.js] object ${props.name} inside constructor`, props);
 	}
 	
@@ -18,6 +20,10 @@ class Person extends Component {
 	
 	componentDidMount() {
 		console.log(`[Person.js] object ${this.props.name} inside componentDidMount`);
+		//if (this.props.index === 0) {
+		//	this.inputElement.focus();
+		//  this.inputElement.current.focus();
+		//}
 	}
 	
 	componentWillReceiveProps(newProps) {
@@ -42,6 +48,10 @@ class Person extends Component {
 		console.log(`Destroying [Person.js] object ${this.props.name} inside componentWillUnmount`);
 	}
 	
+	focusInput() {
+		this.inputElement.current.focus();
+	}
+	
 	render() {
 		console.log(`[Person.js] object ${this.props.name} inside render`);
 		
@@ -53,9 +63,17 @@ class Person extends Component {
 		
   	return (
   		<Aux>
+  		  <AuthContext.Consumer>
+  		    {auth => auth ? <p>Authenticated</p> : null}
+  		  </AuthContext.Consumer>
   			<p onClick={this.props.clickHandler}>I'm {this.props.name} and I'm {this.props.age} years old.</p>
   			<p>{this.props.children}</p>
-  			<input type="text" value={this.props.name} onChange={this.props.changed}/>
+  			<input
+  			  // ref={(elem) => {this.inputElement = elem}}
+  			  ref={this.inputElement}
+  			  type="text" value={this.props.name} 
+  			  onChange={this.props.changed}
+  			/>
   		</Aux>
   	);
   }
