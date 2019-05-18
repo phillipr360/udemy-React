@@ -16,23 +16,29 @@ class App extends PureComponent {
 		
 		// Legacy React: Initialize state in constructor
 		
-	  //this.state = {
-	  //  persons: [
-	  //    {id: 1, name: 'Phil', age: 39, status: 'Ninja'},
-	  //    {id: 2, name: 'Bill', age: 43, status: 'Iced'},
-	  //    {id: 404, name: 'Markus', age: 46, status: 'TG'}
-	  //  ],
-		//  title: props.title,
-	  //  showPersons: false
-	  //}
+	  this.state = {
+	    persons: [
+	      {id: 1, name: 'Phil', age: 39, status: 'Ninja'},
+	      {id: 2, name: 'Bill', age: 43, status: 'Iced'},
+	      {id: 404, name: 'Markus', age: 46, status: 'TG'}
+	    ],
+		  title: props.title,
+	    showPersons: false
+	  }
 	}
 	
 	componentWillMount() {
+		// Discouraged, often used incorrectly
 		console.log('[App.js] inside componentWillMount');
 	}
 	
 	componentDidMount() {
 		console.log('[App.js] inside componentDidMount');
+	}
+	
+	componentWillReceiveProps(newProps) {
+	  // Discouraged, often used incorrectly
+		console.log('Update: [App.js] will receive props inside componentWillReceiveProps', newProps);
 	}
 	
 	//shouldComponentUpdate(newProps, newState) {
@@ -44,23 +50,35 @@ class App extends PureComponent {
 	//}
 	
 	componentWillUpdate(newProps, newState) {
+	  // Discouraged, often used incorrectly
 		console.log('Update: [App.js] inside componentWillUpdate', newProps, newState);
+	}
+	
+	static getDerivedStateFromProps(newProps, prevState) {
+		console.log('Update: [App.js] inside React 16.3 getDerivedStateFromProps', newProps, prevState);
+		const updatedState = prevState;
+		return updatedState;
+	}
+	
+	getSnapshotBeforeUpdate() {
+		console.log('Update: [App.js] inside React 16.3 getSnapshotBeforeUpdate', this.state);
+		return this.state;
 	}
 	
 	componentDidUpdate() {
 		console.log('Update: [App.js] inside componentDidUpdate');
 	}
 	
-  state = {
-    persons: [
-      {id: 1, name: 'Phil', age: 39, status: 'Ninja'},
-      {id: 2, name: 'Bill', age: 43, status: 'Iced'},
-      {id: 404, name: 'Markus', age: 46, status: 'TG'}
-    ],
-    showPersons: false,
-    counter: 0,
-    authenticated: false
-  }
+  //state = {
+  //  persons: [
+  //    {id: 1, name: 'Phil', age: 39, status: 'Ninja'},
+  //    {id: 2, name: 'Bill', age: 43, status: 'Iced'},
+  //    {id: 404, name: 'Markus', age: 46, status: 'TG'}
+  //  ],
+  //  showPersons: false,
+  //  counter: 0,
+  //  authenticated: false
+  //}
 
   nameChangedHandler = (event, id) => {
     const index = this.state.persons.findIndex(p => {
