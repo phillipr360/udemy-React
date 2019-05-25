@@ -13,11 +13,11 @@ const burger = (props) => {
       return arr.concat(el);
     }, []);
   
+  console.log(`Price $${props.totalPrice.toFixed(2)}`, ingredientList);
+  
   if (ingredientList.length === 0) {
     ingredientList = <p>Please start adding ingredients!</p>
   }
-  
-  console.log(ingredientList);
   
   return (
     <div className={classes.Burger}>
