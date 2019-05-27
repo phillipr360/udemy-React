@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import Aux from '../../hoc/Aux';
+import Modal from '../../components/UI/Modal/Modal';
 import Burger from '../../components/Burger/Burger';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
+import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
 
 const PRICES = {
   salad: 0.5,
@@ -23,7 +25,26 @@ class BurgerBuilder extends Component {
       cheese: 0,
       meat: 0
     },
-    totalPrice: 4
+    totalPrice: 4,
+    canOrder: false,
+    showPurchaseModal: false
+  }
+  
+  updateCanOrder(ingredients) {
+    // NOTE: It's more efficient to keep a running total ingredient count
+    // This method naively loops through the whole Hashmap again
+    const sum = Object.keys(ingredients)
+      .map(key => {
+        return ingredients[key];
+      })
+      .reduce((sum, el) => {
+        return sum + el;
+      }, 0);
+    this.setState({canOrder: sum > 0});
+  }
+  
+  purchaseModalHandler = (showModal) => {
+    this.setState({showPurchaseModal: showModal});
   }
   
   addIngredientHandler = (type) => {
@@ -39,6 +60,7 @@ class BurgerBuilder extends Component {
       ingredients: updatedIngredients,
       totalPrice: updatedPrice
     });
+    this.updateCanOrder(updatedIngredients);
   }
   
   removeIngredientHandler = (type) => {
@@ -57,6 +79,7 @@ class BurgerBuilder extends Component {
       ingredients: updatedIngredients,
       totalPrice: updatedPrice
     });
+    this.updateCanOrder(updatedIngredients);
   }
   
   render () {
@@ -69,15 +92,23 @@ class BurgerBuilder extends Component {
     }
     return (
       <Aux>
+        <Modal 
+          show={this.state.showPurchaseModal}
+          hideModalHandler={() => this.purchaseModalHandler(false)}
+        >
+          <OrderSummary ingredients={this.state.ingredients} />
+        </Modal>
         <Burger 
           ingredients={this.state.ingredients}
           totalPrice={this.state.totalPrice}
         />
         <BuildControls
-          totalPrice={this.state.totalPrice}
           ingredientAdded = {this.addIngredientHandler}
           ingredientRemoved = {this.removeIngredientHandler}
           disabled = {disabledInfo}
+          canOrder = {this.state.canOrder}
+          purchaseModalHandler = {() => this.purchaseModalHandler(true)}
+          totalPrice={this.state.totalPrice}
         />
       </Aux>
     );
