@@ -47,6 +47,15 @@ class BurgerBuilder extends Component {
     this.setState({showPurchaseModal: showModal});
   }
   
+  purchaseContinueHandler = () => {
+    alert(`You paid $${this.state.totalPrice.toFixed(2)}!`);
+    window.location.reload(true);
+  }
+  
+  purchaseCancelHandler = () => {
+    this.purchaseModalHandler(false);
+  }
+  
   addIngredientHandler = (type) => {
     const oldCount = this.state.ingredients[type];
     
@@ -96,7 +105,12 @@ class BurgerBuilder extends Component {
           show={this.state.showPurchaseModal}
           hideModalHandler={() => this.purchaseModalHandler(false)}
         >
-          <OrderSummary ingredients={this.state.ingredients} />
+          <OrderSummary
+            ingredients={this.state.ingredients}
+            totalPrice={this.state.totalPrice}
+            continueHandler={this.purchaseContinueHandler}
+            cancelHandler={this.purchaseCancelHandler}
+          />
         </Modal>
         <Burger 
           ingredients={this.state.ingredients}
