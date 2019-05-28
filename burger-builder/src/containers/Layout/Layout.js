@@ -36,6 +36,6 @@ class Layout extends Component {
       </Aux>
     );
   }
-} 
+}
 
 export default Layout;

@@ -1,5 +1,6 @@
 import React from 'react';
 import classes from './Button.css';
+import PropTypes from 'prop-types';
 
 const button = (props) => {
   let btnClasses = [classes.Button];
@@ -15,6 +16,10 @@ const button = (props) => {
       {props.children}
     </button>
   );
+};
+
+button.propTypes = {
+  btnType: PropTypes.string
 };
 
 export default button;

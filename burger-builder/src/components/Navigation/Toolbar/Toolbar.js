@@ -1,5 +1,6 @@
 import React from 'react';
 import classes from './Toolbar.css';
+import PropTypes from 'prop-types';
 
 import Logo from '../../Logo/Logo';
 import NavItems from '../NavItems/NavItems';
@@ -17,5 +18,9 @@ const toolbar = (props) => (
     </nav>
   </header>
 );
+
+toolbar.propTypes = {
+  sideDrawerHandler: PropTypes.func.isRequired
+};
 
 export default toolbar;

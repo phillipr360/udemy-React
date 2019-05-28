@@ -1,5 +1,6 @@
 import React from 'react';
 import classes from './BuildControls.css';
+import PropTypes from 'prop-types';
 
 import BuildControl from './BuildControl/BuildControl';
 
@@ -19,7 +20,7 @@ const buildControls = (props) => (
         label={ctrl.label}
         added={() => props.ingredientAdded(ctrl.type)}
         removed={() => props.ingredientRemoved(ctrl.type)}
-        disabled={props.disabled[ctrl.type]}
+        disabled={props.disabledInfo[ctrl.type]}
       />
     ))}
     <button
@@ -31,5 +32,14 @@ const buildControls = (props) => (
     </button>
   </div>
 );
+
+buildControls.propTypes = {
+  canOrder: PropTypes.bool,
+  disabledInfo: PropTypes.object.isRequired,
+  totalPrice: PropTypes.number.isRequired,
+  ingredientAdded: PropTypes.func.isRequired,
+  ingredientRemoved: PropTypes.func.isRequired,
+  purchaseModalHandler: PropTypes.func.isRequired
+};
 
 export default buildControls;

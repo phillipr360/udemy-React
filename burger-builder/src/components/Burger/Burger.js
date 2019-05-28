@@ -1,6 +1,9 @@
 import React from 'react';
-import Ingredient from './Ingredient/Ingredient';
 import classes from './Burger.css';
+import PropTypes from 'prop-types';
+
+import Ingredient from './Ingredient/Ingredient';
+
 
 const burger = (props) => {
   let ingredientList = Object.keys(props.ingredients)
@@ -27,5 +30,10 @@ const burger = (props) => {
     </div>
   );
 }
+
+burger.propTypes = {
+  ingredients: PropTypes.object.isRequired,
+  totalPrice: PropTypes.number
+};
 
 export default burger;
