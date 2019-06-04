@@ -9,6 +9,10 @@ class NewPost extends Component {
     content: '',
     author: 'Phil'
   }
+  
+  componentDidMount() {
+    console.log(this.props);
+  }
     
   postDataHandler = () => {
     const data = {
