@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route, NavLink, Switch } from 'react-router-dom';
+import { Route, NavLink, Switch, Redirect } from 'react-router-dom';
 
 import Posts from './Posts/Posts';
 //import FullPost from './FullPost/FullPost';
@@ -7,6 +7,10 @@ import NewPost from './NewPost/NewPost';
 import './Blog.css';
 
 class Blog extends Component {
+  state = {
+    auth: true
+  }
+  
   render () {
     return (
       <div className="Blog">
@@ -41,9 +45,11 @@ class Blog extends Component {
         {/*<Route path="/" exact render={() => <h1>Home</h1>} />*/}
         {/*<Route path="/" exact component={Posts} />*/}
         <Switch>
-          <Route path="/new-post" exact component={NewPost} />
+          {this.state.auth ? <Route path="/new-post" exact component={NewPost} /> : null}  
           <Route path="/posts" component={Posts} />
+          <Redirect from="/" to="/posts" />
           {/*<Route path="/:id" exact component={FullPost} />*/}
+          <Route render={() => <h1>Not Found</h1>} />
         </Switch>
       </div>
     );
