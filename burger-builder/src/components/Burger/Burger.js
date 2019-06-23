@@ -1,11 +1,14 @@
 import React from 'react';
 import classes from './Burger.css';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 
 import Ingredient from './Ingredient/Ingredient';
 
 
 const burger = (props) => {
+  console.log(props);
+  
   let ingredientList = Object.keys(props.ingredients)
     .map(ingKey => {
       return [...Array(props.ingredients[ingKey])].map((_, i) => {
@@ -33,4 +36,4 @@ burger.propTypes = {
   ingredients: PropTypes.object.isRequired
 };
 
-export default burger;
+export default withRouter(burger);

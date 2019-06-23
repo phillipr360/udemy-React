@@ -15,11 +15,11 @@ const checkoutSummary = (props) => {
       </div>
       <Button
         btnType="Success"
-        clicked={() => alert("Continue")}
+        clicked={props.continueCheckout}
       >CONTINUE</Button>
       <Button
         btnType="Danger"
-        clicked={() => alert("Cancel")}
+        clicked={props.cancelCheckout}
       >CANCEL</Button>
     </div>
   );
@@ -27,7 +27,8 @@ const checkoutSummary = (props) => {
 
 checkoutSummary.propTypes = {
   ingredients: PropTypes.object.isRequired,
-  totalPrice: PropTypes.number
+  continueCheckout: PropTypes.func,
+  cancelCheckout: PropTypes.func
 };
 
 export default checkoutSummary;
