@@ -15,9 +15,7 @@ const burger = (props) => {
     .reduce((arr, el) => {
       return arr.concat(el);
     }, []);
-  
-  console.log(`Price $${props.totalPrice.toFixed(2)}`, ingredientList);
-  
+    
   if (ingredientList.length === 0) {
     ingredientList = <p>Please start adding ingredients!</p>
   }
@@ -32,8 +30,7 @@ const burger = (props) => {
 }
 
 burger.propTypes = {
-  ingredients: PropTypes.object.isRequired,
-  totalPrice: PropTypes.number
+  ingredients: PropTypes.object.isRequired
 };
 
 export default burger;
