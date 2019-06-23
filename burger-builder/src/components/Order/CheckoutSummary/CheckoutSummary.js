@@ -10,6 +10,7 @@ const checkoutSummary = (props) => {
   return (
     <div className={classes.CheckoutSummary}>
       <h1>I hope it tastes good!</h1>
+      <h3>Total Price: ${props.totalPrice.toFixed(2)}</h3>
       <div style={{width: '100%', margin: 'auto'}}>
         <Burger ingredients={props.ingredients}/>
       </div>
@@ -27,6 +28,7 @@ const checkoutSummary = (props) => {
 
 checkoutSummary.propTypes = {
   ingredients: PropTypes.object.isRequired,
+  totalPrice: PropTypes.number.isRequired,
   continueCheckout: PropTypes.func,
   cancelCheckout: PropTypes.func
 };

@@ -24,7 +24,6 @@ class BurgerBuilder extends Component {
     totalPrice: 0,
     canOrder: false,
     showPurchaseModal: false,
-    loading: false,
     error: false
   }
   
@@ -43,34 +42,6 @@ class BurgerBuilder extends Component {
       this.setState({
         ingredientInfo: ingredientInfo,
         ingredients: ingredients, 
-        totalPrice: initialPrice,
-        canOrder: initialPrice > PRICE
-      });
-    })
-    .catch(error => {
-      console.log(error);
-      this.setState({error: error});
-    });
-  }
-  
-  resetIngredientInfo(props) {
-    axios.get('/ingredients.json')
-    .then(response => {
-      console.log(response);
-      const ingredientInfo = response.data;
-      const ingredients = {};
-      const prices = {};
-      let initialPrice = PRICE;
-      for (let key in ingredientInfo) {
-        ingredients[key] = ingredientInfo[key]['qty'];
-        prices[key] = ingredientInfo[key]['price'];
-        initialPrice += (ingredients[key] * prices[key]);
-      }
-      
-      this.setState({
-        ...props,
-        ingredients: ingredients, 
-        prices: prices,
         totalPrice: initialPrice,
         canOrder: initialPrice > PRICE
       });
@@ -100,48 +71,19 @@ class BurgerBuilder extends Component {
   
   purchaseContinueHandler = () => {
     // alert(`You paid $${this.state.totalPrice.toFixed(2)}!`);
-    
-    this.setState({loading: true});
-    const order = {
-      ingredients: this.state.ingredients,
-      price: this.state.totalprice,
-      displayPrice: `$${this.state.totalPrice.toFixed(2)}`,
-      customer: {
-        name: 'Phil R',
-        address: {
-          street: '123 Fake Street',
-          city: 'Boston',
-          state: 'MA',
-          zip: '02116',
-          country: 'US'
-        },
-        email: 'david.ortiz@example.com'
-      },
-      deliveryMethod: 'fastest'
+    const ingredients = {
+      ...this.state.ingredients
     };
-    
-    axios.post('/orders.json', order)
-      .then(response => {
-        console.log(response);
-        const ingredients = {
-          ...this.state.ingredients
-        };
-        const queryParams = [];
-        for (let i in ingredients) {
-          queryParams.push(`${encodeURIComponent(i)}=${encodeURIComponent(ingredients[i])}`);
-        }
-        this.props.history.push({
-          pathname: "/checkout",
-          search: "?" + queryParams.join("&")
-        });
-      })
-      .catch(error => {
-        console.log(error);
-        this.setState({
-          loading: false,
-          showPurchaseModal: false
-        });
-      });
+    const queryParams = [];
+    for (let i in ingredients) {
+      queryParams.push(`${encodeURIComponent(i)}=${encodeURIComponent(ingredients[i])}`);
+    }
+    queryParams.push(`price=${encodeURIComponent(this.state.totalPrice)}`);
+
+    this.props.history.push({
+      pathname: "/checkout",
+      search: "?" + queryParams.join("&")
+    });
   }
   
   purchaseCancelHandler = () => {
@@ -189,10 +131,6 @@ class BurgerBuilder extends Component {
     };
     
     let orderSummary = null;
-    if (this.state.loading) {
-      orderSummary = <Spinner/>;
-    }
-    
     let burger = (!!this.state.error) ? 
       <p>Cannot load Ingredients! {this.state.error.toString()}</p> :
       <Spinner/>;

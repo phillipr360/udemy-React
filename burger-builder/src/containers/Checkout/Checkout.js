@@ -4,9 +4,14 @@ import { Route } from 'react-router-dom';
 import CheckoutSummary from '../../components/Order/CheckoutSummary/CheckoutSummary';
 import ContactInfo from './ContactInfo/ContactInfo';
 
+const INGREDIENTS = ["cheese", "meat", "salad", "bacon"];
+const PRICEKEY = "price";
+const PRICE = 4;
+
 class Checkout extends Component {
   state = {
-    ingredients: null
+    ingredients: null,
+    totalPrice: 0
   }
   
   componentDidMount() {
@@ -14,15 +19,28 @@ class Checkout extends Component {
       const params = new URLSearchParams(this.props.location.search);
       
       const ingredients = {};
+      let hasIngredients = false;
+      let price = 0;
+      let hasPrice = false;
       for (let param of params) {
         let key = decodeURI(param[0]);
-        let value = parseInt(decodeURI(param[1])) || 0;
-        ingredients[key] = value;
+        if (INGREDIENTS.includes(key)) {
+          let value = parseInt(decodeURI(param[1])) || 0;
+          ingredients[key] = value;
+          hasIngredients = true;
+        }
+        else if (key === PRICEKEY) {
+          price = parseFloat(decodeURI(param[1])) || PRICE;
+          hasPrice = true;
+        }
       }
       
-      this.setState({
-        ingredients: ingredients
-      })
+      if (hasIngredients && hasPrice) {
+        this.setState({
+          ingredients: ingredients,
+          totalPrice: price
+        });
+      }
     }
   }
   
@@ -36,22 +54,29 @@ class Checkout extends Component {
   
   render() {
     let checkoutSummary = <h1 style={{textAlign: "center"}}>No Ingredients Yet</h1>;
-    if (!!this.state.ingredients) {
+    if (!!this.state.ingredients && !!this.state.totalPrice) {
       checkoutSummary = (
-        <CheckoutSummary
-          ingredients={this.state.ingredients}
-          continueCheckout={this.continueCheckout}
-          cancelCheckout={this.cancelCheckout}
-        />
+        <div>
+          <CheckoutSummary
+            ingredients={this.state.ingredients}
+            totalPrice={this.state.totalPrice}
+            continueCheckout={this.continueCheckout}
+            cancelCheckout={this.cancelCheckout}
+          />
+          <Route 
+            path={`${this.props.match.url}/contact`} 
+            render={() => (
+              <ContactInfo 
+                ingredients={this.state.ingredients}
+                totalPrice={this.state.totalPrice}
+              />
+            )}
+          />
+        </div>
       );
     }
     
-    return (
-      <div>
-        {checkoutSummary}
-        <Route path={`${this.props.match.url}/contact`} component={ContactInfo}/>
-      </div>
-    );
+    return checkoutSummary;
   }
 }
 
