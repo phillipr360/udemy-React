@@ -7,11 +7,11 @@ import NavItem from './NavItem/NavItem';
 
 const navItems = (props) => (
   <ul className={classes.NavItems}>
-    <NavItem link={"/"} active={props.location.pathname === "/"}>
+    <NavItem link={"/"} exact>
       BurgerBuilder
     </NavItem>
-    <NavItem link={"/checkout"} active={props.location.pathname === "/checkout"}>
-      Checkout
+    <NavItem link={"/orders"}>
+      My Orders
     </NavItem>
   </ul>
 );
