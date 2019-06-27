@@ -13,6 +13,8 @@ class Counter extends Component {
         <CounterControl label="Decrement" clicked={this.props.onDecrementCounter}  />
         <CounterControl label="Add 5" clicked={() => this.props.onAddValueCounter(5)}  />
         <CounterControl label="Subtract 5" clicked={() => this.props.onSubtractValueCounter(5)}  />
+        <CounterControl label="Reset" clicked={this.props.onResetCounter}  />
+        <CounterControl label="404" clicked={this.props.onTGCounter}  />
       </div>
     );
   }
@@ -30,7 +32,9 @@ const mapDispatchToProps = dispatch => {
     onIncrementCounter: () => dispatch({type: 'INCREMENT'}),
     onDecrementCounter: () => dispatch({type: 'DECREMENT'}),
     onAddValueCounter: (value) => dispatch({type: 'ADD_VALUE', value: value}),
-    onSubtractValueCounter: (value) => dispatch({type: 'SUBTRACT_VALUE', value: value})
+    onSubtractValueCounter: (value) => dispatch({type: 'SUBTRACT_VALUE', value: value}),
+    onResetCounter: () => dispatch({type: 'RESET'}),
+    onTGCounter: () => dispatch({type: '404'})
   };
 }
 
