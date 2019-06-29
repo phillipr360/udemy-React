@@ -16,6 +16,11 @@ class Counter extends Component {
         <CounterControl label="Reset" clicked={this.props.onResetCounter}  />
         <CounterControl label="404" clicked={this.props.onTGCounter}  />
       </div>
+      <hr/>
+      <button>Store Result</button>
+      <ul>
+        <li></li>
+      </ul>
     );
   }
 }
