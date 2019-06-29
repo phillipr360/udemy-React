@@ -17,7 +17,7 @@ class Counter extends Component {
         <CounterControl label="Reset" clicked={this.props.onResetCounter}  />
         <CounterControl label="404" clicked={this.props.onTGCounter} />
         <hr/>
-        <button onClick={this.props.onStoreResult}>Store Result</button>
+        <button onClick={() => this.props.onStoreResult(this.props.ctr, this.props.total)}>Store Result</button>
         <ul>
           {this.props.results.map((result, index) =>
             <li key={index} onClick={() => this.props.onDeleteResult(index)}>Counter: {result.counter} Total: {result.total}</li>
@@ -30,9 +30,9 @@ class Counter extends Component {
 
 const mapStateToProps = state => {
   return {
-    ctr: state.counter,
-    total: state.total,
-    results: state.results
+    ctr: state.ctr.counter,
+    total: state.ctr.total,
+    results: state.res.results
   }
 };
 
@@ -42,7 +42,13 @@ const mapDispatchToProps = dispatch => {
     onDecrementCounter: () => dispatch({type: actionTypes.DECREMENT}),
     onAddValueCounter: (value) => dispatch({type: actionTypes.ADD_VALUE, value: value}),
     onSubtractValueCounter: (value) => dispatch({type: actionTypes.SUBTRACT_VALUE, value: value}),
-    onStoreResult: () => dispatch({type: actionTypes.STORE_RESULT}),
+    onStoreResult: (ctr, total) => dispatch({
+      type: actionTypes.STORE_RESULT, 
+      result: {
+        counter: ctr,
+        total: total
+      }
+    }),
     onDeleteResult: (index) => dispatch({type: actionTypes.DELETE_RESULT, index: index}),
     onResetCounter: () => dispatch({type: actionTypes.RESET}),
     onTGCounter: () => dispatch({type: '404'}),

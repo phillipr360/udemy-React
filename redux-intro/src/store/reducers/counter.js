@@ -1,9 +1,8 @@
-import * as actionTypes from './actions';
+import * as actionTypes from '../actions';
 
 const initialState = {
   counter: 0,
-  total: 0,
-  results: []
+  total: 0
 }
 
 const reducer = (state = initialState, action) => {
@@ -32,26 +31,6 @@ const reducer = (state = initialState, action) => {
         ...state,
         counter: state.counter - action.value,
         total: state.total + 1
-      };
-    case actionTypes.STORE_RESULT:
-      const appended = [...state.results];
-      appended.push({
-        counter: state.counter,
-        total: state.total}
-      );
-      return {
-        ...state,
-        results: state.results.concat({
-          counter: state.counter,
-          total: state.total
-        })
-      };
-    case actionTypes.DELETE_RESULT:
-      // const deleted = [...state.results];
-      // deleted.splice(action.index, 1);
-      return {
-        ...state,
-        results: state.results.filter((result, index) => index !== action.index)
       };
     case actionTypes.RESET:
       return {
