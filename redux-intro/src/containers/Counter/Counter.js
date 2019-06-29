@@ -14,13 +14,15 @@ class Counter extends Component {
         <CounterControl label="Add 5" clicked={() => this.props.onAddValueCounter(5)}  />
         <CounterControl label="Subtract 5" clicked={() => this.props.onSubtractValueCounter(5)}  />
         <CounterControl label="Reset" clicked={this.props.onResetCounter}  />
-        <CounterControl label="404" clicked={this.props.onTGCounter}  />
+        <CounterControl label="404" clicked={this.props.onTGCounter} />
+        <hr/>
+        <button onClick={this.props.onStoreResult}>Store Result</button>
+        <ul>
+          {this.props.results.map((result, index) =>
+            <li key={index} onClick={() => this.props.onDeleteResult(index)}>Counter: {result.counter} Total: {result.total}</li>
+          )}
+        </ul>
       </div>
-      <hr/>
-      <button>Store Result</button>
-      <ul>
-        <li></li>
-      </ul>
     );
   }
 }
@@ -28,7 +30,8 @@ class Counter extends Component {
 const mapStateToProps = state => {
   return {
     ctr: state.counter,
-    total: state.total
+    total: state.total,
+    results: state.results
   }
 };
 
@@ -39,7 +42,9 @@ const mapDispatchToProps = dispatch => {
     onAddValueCounter: (value) => dispatch({type: 'ADD_VALUE', value: value}),
     onSubtractValueCounter: (value) => dispatch({type: 'SUBTRACT_VALUE', value: value}),
     onResetCounter: () => dispatch({type: 'RESET'}),
-    onTGCounter: () => dispatch({type: '404'})
+    onTGCounter: () => dispatch({type: '404'}),
+    onStoreResult: () => dispatch({type: 'STORE_RESULT'}),
+    onDeleteResult: (index) => dispatch({type: 'DELETE_RESULT', index: index}),
   };
 }
 

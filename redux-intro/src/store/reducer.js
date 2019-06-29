@@ -31,11 +31,29 @@ const reducer = (state = initialState, action) => {
         counter: state.counter - action.value,
         total: state.total + 1
       };
-    case 'RESET':
+    case 'STORE_RESULT':
+      const appended = [...state.results];
+      appended.push({
+        counter: state.counter,
+        total: state.total}
+      );
       return {
         ...state,
-        counter: 0,
-        total: 0
+        results: state.results.concat({
+          counter: state.counter,
+          total: state.total
+        })
+      };
+    case 'DELETE_RESULT':
+      // const deleted = [...state.results];
+      // deleted.splice(action.index, 1);
+      return {
+        ...state,
+        results: state.results.filter((result, index) => index !== action.index)
+      };
+    case 'RESET':
+      return {
+        ...initialState
       };
     default:
       return state;
