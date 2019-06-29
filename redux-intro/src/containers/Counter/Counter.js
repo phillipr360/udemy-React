@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
+import * as actionTypes from '../../store/actions';
 import CounterControl from '../../components/CounterControl/CounterControl';
 import CounterOutput from '../../components/CounterOutput/CounterOutput';
 
@@ -37,14 +38,14 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onIncrementCounter: () => dispatch({type: 'INCREMENT'}),
-    onDecrementCounter: () => dispatch({type: 'DECREMENT'}),
-    onAddValueCounter: (value) => dispatch({type: 'ADD_VALUE', value: value}),
-    onSubtractValueCounter: (value) => dispatch({type: 'SUBTRACT_VALUE', value: value}),
-    onResetCounter: () => dispatch({type: 'RESET'}),
+    onIncrementCounter: () => dispatch({type: actionTypes.INCREMENT}),
+    onDecrementCounter: () => dispatch({type: actionTypes.DECREMENT}),
+    onAddValueCounter: (value) => dispatch({type: actionTypes.ADD_VALUE, value: value}),
+    onSubtractValueCounter: (value) => dispatch({type: actionTypes.SUBTRACT_VALUE, value: value}),
+    onStoreResult: () => dispatch({type: actionTypes.STORE_RESULT}),
+    onDeleteResult: (index) => dispatch({type: actionTypes.DELETE_RESULT, index: index}),
+    onResetCounter: () => dispatch({type: actionTypes.RESET}),
     onTGCounter: () => dispatch({type: '404'}),
-    onStoreResult: () => dispatch({type: 'STORE_RESULT'}),
-    onDeleteResult: (index) => dispatch({type: 'DELETE_RESULT', index: index}),
   };
 }
 
