@@ -58,7 +58,7 @@ class ContactInfo extends Component {
             {value: 'cheapest', displayValue: 'Cheapest'}
           ]
         },
-        value: ''
+        value: 'fastest'
       }
     },
     loading: false
@@ -66,25 +66,21 @@ class ContactInfo extends Component {
   
   orderBurger = (event) => {
     event.preventDefault();
-    console.log(this.props.ingredients);
     
     this.setState({loading: true});
+    
+    const formData = {};
+    for (let key in this.state.orderForm) {
+      formData[key] = this.state.orderForm[key].value;
+    }
+    
+    console.log(this.props.ingredients, this.props.totalPrice, formData);
+
     const order = {
       ingredients: this.props.ingredients,
       price: this.props.totalPrice,
       displayPrice: `$${this.props.totalPrice.toFixed(2)}`,
-      customer: {
-        name: 'Phil R',
-        address: {
-          street: '123 Fake Street',
-          city: 'Boston',
-          state: 'MA',
-          zip: '02116',
-          country: 'US'
-        },
-        email: 'tom.brady@example.com'
-      },
-      deliveryMethod: 'fastest'
+      deliveryInfo: formData
     };
     
     axios.post('/orders.json', order)
@@ -100,6 +96,18 @@ class ContactInfo extends Component {
       });
   }
   
+  changeHandler = (event, key) => {
+    const orderFormCopy = {
+      ...this.state.orderForm
+    };
+    const updatedElement = {
+      ...orderFormCopy[key]
+    };
+    updatedElement.value = event.target.value;
+    orderFormCopy[key] = updatedElement;
+    this.setState({orderForm: orderFormCopy});
+  }
+  
   render() {
     const formElementsArray = Object.keys(this.state.orderForm).map(key => {
       return {
@@ -111,16 +119,17 @@ class ContactInfo extends Component {
     let form = (
       <div className={classes.ContactInfo}>
         <h4>Enter your Contact Info:</h4>
-        <form>
+        <form onSubmit={this.orderBurger}>
           {formElementsArray.map(element =>
             <Input
               key={element.id}
               elementType={element.config.elementType}
               elementConfig={element.config.elementConfig}
               value={element.config.value}
+              changed={(event) => this.changeHandler(event, element.id)}
             />
           )}
-          <Button btnType="Success" clicked={this.orderBurger}>ORDER</Button>
+          <Button btnType="Success">ORDER</Button>
         </form>
       </div>
     );

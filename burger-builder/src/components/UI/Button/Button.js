@@ -19,7 +19,8 @@ const button = (props) => {
 };
 
 button.propTypes = {
-  btnType: PropTypes.string
+  btnType: PropTypes.string,
+  clicked: PropTypes.func
 };
 
 export default button;
