@@ -8,14 +8,6 @@
 	box-sizing: border-box;
 }
 
-.ContactInfo input {
-	display: block;
-	width: 80%;
-	margin: 5px;
-	box-shadow: 0 1px 1px #ccc;
-	border: 1px solid #eee;
-}
-
 @media(min-width: 600px) {
 	.ContactInfo {
 		width: 500px;

@@ -5,17 +5,61 @@ import classes from './ContactInfo.css';
 import axios from '../../../axiosOrders';
 import Button from '../../../components/UI/Button/Button';
 import Spinner from '../../../components/UI/Spinner/Spinner';
+import Input from '../../../components/UI/Input/Input';
 
 class ContactInfo extends Component {
   state = {
-    name: "",
-    email: "",
-    address: {
-      street: "",
-      city: "",
-      state: "",
-      zip: "",
-      country: "US"
+    orderForm: {
+      name: {
+        elementType: 'input',
+        elementConfig: {
+          type: 'text',
+          placeholder: 'Name'
+        },
+        value: ''
+      },
+      email: {
+        elementType: 'input',
+        elementConfig: {
+          type: 'email',
+          placeholder: 'Email'
+        },
+        value: ''
+      },
+      address: {
+        elementType: 'textarea',
+        elementConfig: {
+          type: 'text',
+          placeholder: 'Full Delivery Address'
+        },
+        value: ''
+      },
+      zip: {
+        elementType: 'input',
+        elementConfig: {
+          type: 'text',
+          placeholder: 'Zip/Postal code'
+        },
+        value: ''
+      },
+      country: {
+        elementType: 'input',
+        elementConfig: {
+          type: 'text',
+          placeholder: 'Country'
+        },
+        value: ''
+      },
+      deliveryMethod: {
+        elementType: 'select',
+        elementConfig: {
+          options: [
+            {value: 'fastest', displayValue: 'Fastest'},
+            {value: 'cheapest', displayValue: 'Cheapest'}
+          ]
+        },
+        value: ''
+      }
     },
     loading: false
   }
@@ -57,16 +101,25 @@ class ContactInfo extends Component {
   }
   
   render() {
+    const formElementsArray = Object.keys(this.state.orderForm).map(key => {
+      return {
+        id: key,
+        config: this.state.orderForm[key]
+      };
+    });
+
     let form = (
       <div className={classes.ContactInfo}>
         <h4>Enter your Contact Info:</h4>
         <form>
-          <input type="text" name="name" placeholder="Name:" />
-          <input type="text" name="email" placeholder="Email:" />
-          <input type="text" name="street" placeholder="Street Address:" />
-          <input type="text" name="city" placeholder="City:" />
-          <input type="text" name="state" placeholder="State:" />
-          <input type="text" name="zip" placeholder="Zipcode:" />
+          {formElementsArray.map(element =>
+            <Input
+              key={element.id}
+              elementType={element.config.elementType}
+              elementConfig={element.config.elementConfig}
+              value={element.config.value}
+            />
+          )}
           <Button btnType="Success" clicked={this.orderBurger}>ORDER</Button>
         </form>
       </div>
