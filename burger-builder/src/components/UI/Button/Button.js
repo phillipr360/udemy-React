@@ -11,6 +11,7 @@ const button = (props) => {
   return(
     <button
       className={btnClasses.join(' ')}
+      disabled={props.disabled}
       onClick={props.clicked}
     >
       {props.children}
@@ -20,6 +21,7 @@ const button = (props) => {
 
 button.propTypes = {
   btnType: PropTypes.string,
+  disabled: PropTypes.bool,
   clicked: PropTypes.func
 };
 

@@ -16,7 +16,12 @@ class ContactInfo extends Component {
           type: 'text',
           placeholder: 'Name'
         },
-        value: ''
+        validation: {
+          required: true
+        },
+        value: '',
+        valid: false,
+        touched: false
       },
       email: {
         elementType: 'input',
@@ -24,7 +29,12 @@ class ContactInfo extends Component {
           type: 'email',
           placeholder: 'Email'
         },
-        value: ''
+        validation: {
+          required: true
+        },
+        value: '',
+        valid: false,
+        touched: false
       },
       address: {
         elementType: 'textarea',
@@ -32,23 +42,42 @@ class ContactInfo extends Component {
           type: 'text',
           placeholder: 'Full Delivery Address'
         },
-        value: ''
+        validation: {
+          required: true
+        },
+        value: '',
+        valid: false,
+        touched: false
       },
       zip: {
         elementType: 'input',
         elementConfig: {
           type: 'text',
-          placeholder: 'Zip/Postal code'
+          placeholder: 'Zip/Postal Code'
         },
-        value: ''
+        validation: {
+          required: true,
+          minLength: 5,
+          maxLength: 10
+        },
+        value: '',
+        valid: false,
+        touched: false
       },
       country: {
         elementType: 'input',
         elementConfig: {
           type: 'text',
-          placeholder: 'Country'
+          placeholder: 'Country Code'
         },
-        value: ''
+        validation: {
+          required: true,
+          minLength: 2,
+          maxLength: 3
+        },
+        value: '',
+        valid: false,
+        touched: false
       },
       deliveryMethod: {
         elementType: 'select',
@@ -58,9 +87,12 @@ class ContactInfo extends Component {
             {value: 'cheapest', displayValue: 'Cheapest'}
           ]
         },
-        value: 'fastest'
+        value: 'fastest',
+        validation: {},
+        valid: true
       }
     },
+    formValid: false,
     loading: false
   }
   
@@ -96,6 +128,25 @@ class ContactInfo extends Component {
       });
   }
   
+  validate(value, rules={}) {
+    if (rules.required) {
+      if (value.trim() === "") {
+        return false;
+      }
+    }
+    if (rules.minLength) {
+       if (value.trim().length < rules.minLength) {
+         return false;
+       }
+    }
+    if (rules.maxLength) {
+      if (value.trim().length > rules.maxLength) {
+        return false;
+      }
+    }
+    return true;
+  }
+  
   changeHandler = (event, key) => {
     const orderFormCopy = {
       ...this.state.orderForm
@@ -103,12 +154,24 @@ class ContactInfo extends Component {
     const updatedElement = {
       ...orderFormCopy[key]
     };
+    updatedElement.touched = true;
     updatedElement.value = event.target.value;
+    updatedElement.valid = this.validate(event.target.value, updatedElement.validation);
     orderFormCopy[key] = updatedElement;
-    this.setState({orderForm: orderFormCopy});
+    
+    let formValid = true;
+    for (let key of Object.keys(orderFormCopy)) {
+      if (!orderFormCopy[key].valid) {
+        formValid = false;
+        break;
+      }
+    }
+    
+    this.setState({orderForm: orderFormCopy, formValid: formValid});
   }
   
   render() {
+    console.log(this.state.formValid);
     const formElementsArray = Object.keys(this.state.orderForm).map(key => {
       return {
         id: key,
@@ -126,10 +189,12 @@ class ContactInfo extends Component {
               elementType={element.config.elementType}
               elementConfig={element.config.elementConfig}
               value={element.config.value}
+              validate={element.config.touched && !!element.config.validation}
+              invalid={!element.config.valid}
               changed={(event) => this.changeHandler(event, element.id)}
             />
           )}
-          <Button btnType="Success">ORDER</Button>
+          <Button btnType="Success" disabled={!this.state.formValid}>ORDER</Button>
         </form>
       </div>
     );
