@@ -30,7 +30,23 @@ class ContactInfo extends Component {
           placeholder: 'Email'
         },
         validation: {
-          required: true
+          required: true,
+          pattern: /\S+@(\S+\.)+\w{3}/
+        },
+        value: '',
+        valid: false,
+        touched: false
+      },
+      phone: {
+        elementType: 'string',
+        elementConfig: {
+          type: 'text',
+          placeholder: 'Phone Number'
+        },
+        validation: {
+          minLength: 10,
+          maxLength: 13,
+          pattern: /\d+/
         },
         value: '',
         valid: false,
@@ -40,10 +56,40 @@ class ContactInfo extends Component {
         elementType: 'textarea',
         elementConfig: {
           type: 'text',
-          placeholder: 'Full Delivery Address'
+          placeholder: 'Street Address'
         },
         validation: {
-          required: true
+          required: true,
+          minLength: 10
+        },
+        value: '',
+        valid: false,
+        touched: false
+      },
+      city: {
+        elementType: 'input',
+        elementConfig: {
+          type: 'text',
+          placeholder: 'City'
+        },
+        validation: {
+          required: true,
+          minLength: 2,
+          pattern: /^[A-Z]{2}$|^\w+([\s-]\w+)*$/
+        },
+        value: '',
+        valid: false,
+        touched: false
+      },
+      state: {
+        elementType: 'input',
+        elementConfig: {
+          type: 'text',
+          placeholder: 'State/Province'
+        },
+        validation: {
+          minLength: 2,
+          pattern: /^[A-Z]{2}$|^\w+([\s-]\w+)*$/
         },
         value: '',
         valid: false,
@@ -58,33 +104,36 @@ class ContactInfo extends Component {
         validation: {
           required: true,
           minLength: 5,
-          maxLength: 10
+          maxLength: 10,
+          pattern: /^(\d{5}([-]\d{4})?)$|^([A-Z\d]{3}\s[A-Z\d]{3})$/
         },
         value: '',
         valid: false,
         touched: false
       },
       country: {
-        elementType: 'input',
+        elementType: 'select',
         elementConfig: {
-          type: 'text',
-          placeholder: 'Country Code'
+          options: [
+            {value: 'US', displayValue: 'US'},
+            {value: 'CA', displayValue: 'CA'},
+            {value: 'UK', displayValue: 'UK'},
+            {value: 'EU', displayValue: 'EU'}
+          ]
         },
+        value: 'US',
         validation: {
-          required: true,
-          minLength: 2,
-          maxLength: 3
+          required: true
         },
-        value: '',
-        valid: false,
-        touched: false
+        valid: true
       },
       deliveryMethod: {
         elementType: 'select',
         elementConfig: {
           options: [
             {value: 'fastest', displayValue: 'Fastest'},
-            {value: 'cheapest', displayValue: 'Cheapest'}
+            {value: 'cheapest', displayValue: 'Cheapest'},
+            {value: 'premium', displayValue: 'Premium'}
           ]
         },
         value: 'fastest',
@@ -133,6 +182,10 @@ class ContactInfo extends Component {
       if (value.trim() === "") {
         return false;
       }
+    } else {
+      if (value.trim() === "") {
+        return true;
+      }
     }
     if (rules.minLength) {
        if (value.trim().length < rules.minLength) {
@@ -144,6 +197,12 @@ class ContactInfo extends Component {
         return false;
       }
     }
+    if (rules.pattern) {
+      if (!value.match(rules.pattern)) {
+        return false;
+      }
+    }
+
     return true;
   }
   
@@ -171,7 +230,6 @@ class ContactInfo extends Component {
   }
   
   render() {
-    console.log(this.state.formValid);
     const formElementsArray = Object.keys(this.state.orderForm).map(key => {
       return {
         id: key,
