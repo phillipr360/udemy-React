@@ -14,11 +14,12 @@ class ContactInfo extends Component {
         elementType: 'input',
         elementConfig: {
           type: 'text',
-          placeholder: 'Name'
+          placeholder: 'Name* (denotes required field)'
         },
         validation: {
           required: true
         },
+        label: 'Name*',
         value: '',
         valid: false,
         touched: false
@@ -27,12 +28,13 @@ class ContactInfo extends Component {
         elementType: 'input',
         elementConfig: {
           type: 'email',
-          placeholder: 'Email'
+          placeholder: 'Email (your@email.com)'
         },
         validation: {
           required: true,
           pattern: /\S+@(\S+\.)+\w{3}/
         },
+        label: 'Email*',
         value: '',
         valid: false,
         touched: false
@@ -41,13 +43,14 @@ class ContactInfo extends Component {
         elementType: 'string',
         elementConfig: {
           type: 'text',
-          placeholder: 'Phone Number'
+          placeholder: 'Phone Number (15552223333)'
         },
         validation: {
           minLength: 10,
-          maxLength: 13,
+          maxLength: 15,
           pattern: /\d+/
         },
+        label: 'Phone Number',
         value: '',
         valid: false,
         touched: false
@@ -56,12 +59,13 @@ class ContactInfo extends Component {
         elementType: 'textarea',
         elementConfig: {
           type: 'text',
-          placeholder: 'Street Address'
+          placeholder: 'Street Address (123 Fake Street, Suite 34)'
         },
         validation: {
           required: true,
           minLength: 10
         },
+        label: 'Street Address*',
         value: '',
         valid: false,
         touched: false
@@ -70,13 +74,12 @@ class ContactInfo extends Component {
         elementType: 'input',
         elementConfig: {
           type: 'text',
-          placeholder: 'City'
+          placeholder: 'City (Boston)'
         },
         validation: {
-          required: true,
-          minLength: 2,
-          pattern: /^[A-Z]{2}$|^\w+([\s-]\w+)*$/
+          required: true
         },
+        label: 'City*',
         value: '',
         valid: false,
         touched: false
@@ -85,12 +88,14 @@ class ContactInfo extends Component {
         elementType: 'input',
         elementConfig: {
           type: 'text',
-          placeholder: 'State/Province'
+          placeholder: 'State/Province (MA)'
         },
         validation: {
+          required: true,
           minLength: 2,
           pattern: /^[A-Z]{2}$|^\w+([\s-]\w+)*$/
         },
+        label: 'State/Province*',
         value: '',
         valid: false,
         touched: false
@@ -99,7 +104,7 @@ class ContactInfo extends Component {
         elementType: 'input',
         elementConfig: {
           type: 'text',
-          placeholder: 'Zip/Postal Code'
+          placeholder: 'Zip/Postal Code (55555-1234)'
         },
         validation: {
           required: true,
@@ -107,6 +112,7 @@ class ContactInfo extends Component {
           maxLength: 10,
           pattern: /^(\d{5}([-]\d{4})?)$|^([A-Z\d]{3}\s[A-Z\d]{3})$/
         },
+        label: 'Zip/Postal Code*',
         value: '',
         valid: false,
         touched: false
@@ -121,6 +127,7 @@ class ContactInfo extends Component {
             {value: 'EU', displayValue: 'EU'}
           ]
         },
+        label: 'Country*',
         value: 'US',
         validation: {
           required: true
@@ -136,6 +143,7 @@ class ContactInfo extends Component {
             {value: 'premium', displayValue: 'Premium'}
           ]
         },
+        label: 'Delivery Method',
         value: 'fastest',
         validation: {},
         valid: true
@@ -147,6 +155,10 @@ class ContactInfo extends Component {
   
   orderBurger = (event) => {
     event.preventDefault();
+    if (!this.state.formValid) {
+      alert("Please fill out the form first");
+      return;
+    }
     
     this.setState({loading: true});
     
@@ -178,29 +190,17 @@ class ContactInfo extends Component {
   }
   
   validate(value, rules={}) {
-    if (rules.required) {
-      if (value.trim() === "") {
-        return false;
-      }
-    } else {
-      if (value.trim() === "") {
-        return true;
-      }
+    if (value.trim() === "") {
+      return rules.required ? false : true;
     }
-    if (rules.minLength) {
-       if (value.trim().length < rules.minLength) {
-         return false;
-       }
+    if (rules.minLength && value.trim().length < rules.minLength) {
+      return false;
     }
-    if (rules.maxLength) {
-      if (value.trim().length > rules.maxLength) {
-        return false;
-      }
+    if (rules.maxLength && value.trim().length > rules.maxLength) {
+      return false;
     }
-    if (rules.pattern) {
-      if (!value.match(rules.pattern)) {
-        return false;
-      }
+    if (rules.pattern && !value.match(rules.pattern)) {
+      return false;
     }
 
     return true;
@@ -244,6 +244,7 @@ class ContactInfo extends Component {
           {formElementsArray.map(element =>
             <Input
               key={element.id}
+              label={element.config.label}
               elementType={element.config.elementType}
               elementConfig={element.config.elementConfig}
               value={element.config.value}

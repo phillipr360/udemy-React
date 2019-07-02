@@ -28,10 +28,15 @@ const order = (props) => {
     );
   });
   
+  
+  
   return (
     <div className={classes.Order}>
       <p>Ingredients: {ingredientList}</p>
       <p>Price: <strong>${parseFloat(props.price).toFixed(2)}</strong></p>
+      {props.deliveryInfo && (
+        <p>Ordered by: {props.deliveryInfo.name} in {props.deliveryInfo.city}, {props.deliveryInfo.state}</p>
+      )}
     </div>
   );
 }
