@@ -62,18 +62,6 @@ class BurgerBuilder extends Component {
     this.purchaseModalHandler(false);
   }
   
-  addIngredientHandler = (type) => {
-    this.props.addIngredient(type);
-    
-    //const updatedPrice = this.props.totalPrice;
-  }
-  
-  removeIngredientHandler = (type) => {
-    this.props.removeIngredient(type);
-
-    //const updatedPrice = Math.max(PRICE, this.props.totalPrice);
-  }
-  
   render () {
     const disabledInfo = {
       ...this.props.ingredients
@@ -93,8 +81,8 @@ class BurgerBuilder extends Component {
         <Aux>
           <Burger ingredients={this.props.ingredients} />
           <BuildControls
-            ingredientAdded = {this.addIngredientHandler}
-            ingredientRemoved = {this.removeIngredientHandler}
+            ingredientAdded = {(type) => this.props.addIngredient(type)}
+            ingredientRemoved = {(type) => this.props.removeIngredient(type)}
             disabledInfo = {disabledInfo}
             canOrder = {this.props.totalIngredients > 0}
             purchaseModalHandler = {() => this.purchaseModalHandler(true)}
