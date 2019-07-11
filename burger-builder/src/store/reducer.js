@@ -1,23 +1,36 @@
 import * as actionTypes from './actions';
 
+const PRICE = 4;
 const initialState = {
   ingredients: {},
-  totalIngredients: 0
+  prices: {},
+  totalIngredients: 0,
+  totalPrice: 0
 }
 
 const reducer = (state = initialState, action) => {
   console.log(state, action);
   
   switch (action.type) {
-    case actionTypes.INITIALIZE_INGREDIENTS: {
-      const totalIngredients = Object.keys(action.ingredients)
-        .map(key => action.ingredients[key] || 0)
-        .reduce((total, value) => total + value, 0);
+    case actionTypes.INITIALIZE_INGREDIENT_INFO: {
+      const ingredients = { ...initialState.ingredients };
+      const prices = { ...initialState.prices };
+      let totalIngredients = 0;
+      let totalPrice = PRICE;
+      
+      for (let key in action.ingredientInfo) {
+        ingredients[key] = action.ingredientInfo[key]['qty'];
+        prices[key] = action.ingredientInfo[key]['price'];
+        totalIngredients += ingredients[key];
+        totalPrice += (ingredients[key] * prices[key]);
+      }
       
       return {
         ...state,
-        ingredients: { ...action.ingredients },
-        totalIngredients: totalIngredients
+        ingredients: { ...ingredients },
+        prices: { ...prices },
+        totalIngredients: totalIngredients,
+        totalPrice: totalPrice
       };
     }
       
@@ -29,7 +42,8 @@ const reducer = (state = initialState, action) => {
           ...state.ingredients,
           [action.ingredientName] : ingredientNameTotal + 1
         },
-        totalIngredients: state.totalIngredients + 1
+        totalIngredients: state.totalIngredients + 1,
+        totalPrice: state.totalPrice + state.prices[action.ingredientName]
       };
     }
     
@@ -41,7 +55,8 @@ const reducer = (state = initialState, action) => {
           ...state.ingredients,
           [action.ingredientName] : Math.max(ingredientNameTotal - 1, 0)
         },
-        totalIngredients: Math.max(state.totalIngredients - 1, 0)
+        totalIngredients: Math.max(state.totalIngredients - 1, 0),
+        totalPrice: Math.max(state.totalPrice - state.prices[action.ingredientName], PRICE)
       };
     }
     
