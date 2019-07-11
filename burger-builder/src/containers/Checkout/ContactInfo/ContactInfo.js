@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 import classes from './ContactInfo.css';
 
 import axios from '../../../axiosOrders';
@@ -52,7 +53,7 @@ class ContactInfo extends Component {
         },
         label: 'Phone Number',
         value: '',
-        valid: false,
+        valid: true,
         touched: false
       },
       address: {
@@ -265,4 +266,13 @@ class ContactInfo extends Component {
   }
 }
 
-export default withRouter(ContactInfo);
+const mapStateToProps = state => {
+  return {
+    ingredients: state.ingredients,
+    totalPrice: state.totalPrice
+  }
+};
+
+export default withRouter(
+  connect(mapStateToProps)(ContactInfo)
+);
